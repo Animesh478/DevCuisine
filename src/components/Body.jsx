@@ -9,19 +9,18 @@ function Body() {
 
   useEffect(() => {
     async function fetchData() {
+      // const response = await fetch(RESTAURANT_LIST_API);
       const response = await fetch(
-        "https://namastedev.com/api/v1/listRestaurants",
+        "https://corsproxy.io/https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9880043&lng=77.6893675&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING",
       );
-      const data = await response.json();
-      console.log(data);
-      setListOfRestaurants(
-        data.data?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle
-          ?.restaurants,
-      );
-      setFilteredRestaurants(
-        data.data?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle
-          ?.restaurants,
-      );
+      const result = await response.json();
+      console.log(result);
+      // const allRestaurants = result.data?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants
+      const allRestaurants =
+        result.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle
+          ?.restaurants;
+      setListOfRestaurants(allRestaurants);
+      setFilteredRestaurants(allRestaurants);
     }
     fetchData();
   }, []);
@@ -45,11 +44,6 @@ function Body() {
     );
   }
 
-  // todo: make a shimmer ui component
-  if (listOfRestaurants.length === 0) {
-    return <Shimmer />;
-  }
-
   return (
     <div>
       <div>
@@ -64,16 +58,20 @@ function Body() {
       <div>
         <button onClick={handleFilterTopRestaurants}>Top Picks</button>
       </div>
-      <div className="grid grid-cols-4 justify-start gap-3 border border-black mx-10 md:mx-20 lg:mx-40 mt-20  px-10">
-        {filteredRestaurants.map((restaurant) => {
-          return (
-            <RestaurantCard
-              key={restaurant.info.id}
-              resInfo={restaurant.info}
-            />
-          );
-        })}
-      </div>
+      {listOfRestaurants.length === 0 ? (
+        <Shimmer />
+      ) : (
+        <div className="grid grid-cols-4 justify-start gap-3  mx-10 md:mx-20 lg:mx-40 mt-20  px-10">
+          {filteredRestaurants.map((restaurant) => {
+            return (
+              <RestaurantCard
+                key={restaurant.info.id}
+                resInfo={restaurant.info}
+              />
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
