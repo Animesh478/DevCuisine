@@ -8,6 +8,7 @@ import AboutUs from "./components/AboutUs.jsx";
 import ErrorPage from "./components/ErrorPage.jsx";
 import RootLayout from "./components/RootLayout.jsx";
 import RestauratMenu from "./components/RestaurantMenu.jsx";
+import Home from "./components/Home.jsx";
 
 const router = createBrowserRouter([
   {
@@ -16,7 +17,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <App />,
+        element: <Home />,
       },
       {
         path: "/about",
