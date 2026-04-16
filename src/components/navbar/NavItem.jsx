@@ -1,7 +1,9 @@
-function NavItem({ name }) {
+import { Link } from "react-router-dom";
+
+function NavItem({ name, path }) {
   return (
     <li className="hover:text-amber-600 hover:cursor-pointer font-medium">
-      {name}
+      <Link to={path}>{name}</Link>
     </li>
   );
 }

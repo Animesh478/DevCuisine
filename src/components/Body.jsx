@@ -45,15 +45,21 @@ function Body() {
   }
 
   return (
-    <div>
-      <div>
+    <div className="mt-10 flex flex-col items-center">
+      <div className="flex gap-2">
         <input
           type="text"
           value={searchText}
-          className="border-2 border-amber-600"
+          className="border border-stone-400 w-100 rounded-sm px-1 outline-0"
           onChange={handleSearchText}
+          placeholder="Search restaurants"
         />
-        <button onClick={handleFilterRestaurants}>Search</button>
+        <button
+          className="cursor-pointer hover:text-amber-600"
+          onClick={handleFilterRestaurants}
+        >
+          Search
+        </button>
       </div>
       <div>
         <button onClick={handleFilterTopRestaurants}>Top Picks</button>

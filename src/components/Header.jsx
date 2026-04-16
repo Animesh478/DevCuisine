@@ -11,9 +11,9 @@ function Header() {
       </div>
       <div>
         <ul className="flex gap-10 ">
-          <NavItem name="Home" />
-          <NavItem name="About Us" />
-          <NavItem name="Contact Us" />
+          <NavItem name="Home" path="/" />
+          <NavItem name="About Us" path="/about" />
+          <NavItem name="Contact Us" path="/contact" />
           <NavItem name="Cart" />
         </ul>
       </div>
