@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import RestaurantCard from "./RestaurantCard";
 import Shimmer from "./Shimmer";
+import { RESTAURANT_LIST_API } from "../utils/constants";
 
 function Body() {
   const [listOfRestaurants, setListOfRestaurants] = useState([]);
@@ -9,16 +10,15 @@ function Body() {
 
   useEffect(() => {
     async function fetchData() {
-      // const response = await fetch(RESTAURANT_LIST_API);
-      const response = await fetch(
-        "https://corsproxy.io/https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9880043&lng=77.6893675&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING",
-      );
+      const response = await fetch(RESTAURANT_LIST_API);
       const result = await response.json();
       console.log(result);
-      // const allRestaurants = result.data?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants
       const allRestaurants =
-        result.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle
+        result.data?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle
           ?.restaurants;
+      // const allRestaurants =
+      //   result.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle
+      //     ?.restaurants;
       setListOfRestaurants(allRestaurants);
       setFilteredRestaurants(allRestaurants);
     }
