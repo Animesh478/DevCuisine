@@ -1,8 +1,12 @@
+import { Link } from "react-router-dom";
 import { CDN_URL } from "../utils/constants";
 
 function RestaurantCard({ resInfo }) {
   return (
-    <div className="p-2  font-poppins flex flex-col items-center justify-center">
+    <Link
+      to={`/restaurant/${resInfo.id}`}
+      className="p-2  font-poppins flex flex-col items-center justify-center"
+    >
       <img
         src={`${CDN_URL}${resInfo.cloudinaryImageId}`}
         className="w-full md:w-40 lg:w-70 lg:h-50 rounded-md object-cover"
@@ -15,7 +19,7 @@ function RestaurantCard({ resInfo }) {
         <h4>{resInfo.sla.deliveryTime} mins</h4>
       </div>
       <h4 className="text-stone-500">{resInfo.areaName}</h4>
-    </div>
+    </Link>
   );
 }
 

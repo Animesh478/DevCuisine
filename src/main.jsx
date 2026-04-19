@@ -3,7 +3,6 @@ import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import "./index.css";
-import App from "./App.jsx";
 import AboutUs from "./components/AboutUs.jsx";
 import ErrorPage from "./components/ErrorPage.jsx";
 import RootLayout from "./components/RootLayout.jsx";
@@ -24,7 +23,7 @@ const router = createBrowserRouter([
         element: <AboutUs />,
       },
       {
-        path: "/restaurant/:id",
+        path: "/restaurant/:resId",
         element: <RestauratMenu />,
       },
     ],

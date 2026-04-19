@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+
 import { CDN_URL } from "../utils/constants";
 import Shimmer from "./Shimmer";
 
@@ -6,21 +8,26 @@ function RestauratMenu() {
   const [restaurantInfo, setRestaurantInfo] = useState(null);
   const [restaurantMenu, setRestaurantMenu] = useState(null);
 
-  const fetchData = async function () {
-    try {
-      const response = await fetch(
-        "https://corsproxy.io/https://namastedev.com/api/v1/listRestaurantMenu/234567",
-      );
-      //   console.log(response);
-      if (!response.ok) {
-        throw new Error("Error fetching data");
+  const { resId } = useParams();
+
+  const fetchData = useCallback(() => {
+    async function fetchRestaurant() {
+      try {
+        const response = await fetch(
+          `https://corsproxy.io/https://namastedev.com/api/v1/listRestaurantMenu/${resId}`,
+        );
+        //   console.log(response);
+        if (!response.ok) {
+          throw new Error("Error fetching data");
+        }
+        const result = await response.json();
+        return result;
+      } catch (error) {
+        console.log(error);
       }
-      const result = await response.json();
-      return result;
-    } catch (error) {
-      console.log(error);
     }
-  };
+    return fetchRestaurant();
+  }, [resId]);
 
   useEffect(() => {
     async function fetchInfo() {
@@ -35,7 +42,7 @@ function RestauratMenu() {
       setRestaurantMenu(items);
     }
     fetchInfo();
-  }, []);
+  }, [fetchData]);
 
   if (!restaurantInfo) {
     return <Shimmer />;
@@ -43,6 +50,7 @@ function RestauratMenu() {
 
   return (
     <div className="flex flex-col justify-center items-center mt-20 ">
+      {/* //? Restaurant Info Section */}
       <header className="flex flex-col gap-3 min-w-1/2 font-poppins">
         <h1 className="font-bold text-4xl">{restaurantInfo.name}</h1>
         <div className="border border-stone-400 rounded-lg p-5 shadow-md shadow-stone-300 flex flex-col gap-2">
@@ -96,6 +104,8 @@ function RestauratMenu() {
           </h3>
         </div>
       </header>
+
+      {/* //? Menu section */}
       <main className="mt-5 min-w-1/2 flex flex-col justify-center items-center">
         <h2 className="text-xl font-bold font-poppins text-stone-600 border-b-2 border-stone-400 w-1/2 text-center">
           Menu
@@ -124,7 +134,7 @@ function RestauratMenu() {
                       <img
                         src={`${CDN_URL}/${img}`}
                         alt=""
-                        className="w-50 h-50"
+                        className="w-50 h-30 rounded-lg object-cover"
                       />
                     </div>
                   </li>
