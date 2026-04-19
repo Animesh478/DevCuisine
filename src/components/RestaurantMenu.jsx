@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { CDN_URL } from "../utils/constants";
 import Shimmer from "./Shimmer";
+import MenuSection from "./MenuSection";
 
 function RestauratMenu() {
   const [restaurantInfo, setRestaurantInfo] = useState(null);
@@ -16,7 +16,7 @@ function RestauratMenu() {
         const response = await fetch(
           `https://corsproxy.io/https://namastedev.com/api/v1/listRestaurantMenu/${resId}`,
         );
-        //   console.log(response);
+
         if (!response.ok) {
           throw new Error("Error fetching data");
         }
@@ -32,14 +32,19 @@ function RestauratMenu() {
   useEffect(() => {
     async function fetchInfo() {
       const result = await fetchData();
+      console.log(result);
       const restaurantInfo = result.data.cards[2].card.card.info;
-      const items =
-        result?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards[1]
-          ?.card?.card.itemCards;
-      console.log(items);
-      console.log(restaurantInfo);
+      // const itemsInfo =
+      //   result?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards[1]
+      //     ?.card?.card;
+      const itemsInfo =
+        result?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards.slice(
+          1,
+        );
+      // console.log(items);
+      // console.log(restaurantInfo);
       setRestaurantInfo(restaurantInfo);
-      setRestaurantMenu(items);
+      setRestaurantMenu(itemsInfo);
     }
     fetchInfo();
   }, [fetchData]);
@@ -107,41 +112,14 @@ function RestauratMenu() {
 
       {/* //? Menu section */}
       <main className="mt-5 min-w-1/2 flex flex-col justify-center items-center">
-        <h2 className="text-xl font-bold font-poppins text-stone-600 border-b-2 border-stone-400 w-1/2 text-center">
+        <h2 className="text-xl font-bold font-poppins text-stone-600  text-center">
           Menu
         </h2>
-        <div>
-          <ul>
-            {restaurantMenu &&
-              restaurantMenu.map((menuItem) => {
-                const menuObj = menuItem.card.info;
-                const menuId = menuObj.id;
-                const name = menuObj.name;
-                const desc = menuObj.description;
-                const price = menuObj.price / 100 || menuObj.defaultPrice / 100;
-                const img = menuObj.imageId;
-                return (
-                  <li
-                    key={menuId}
-                    className="flex items-center justify-between gap-5 m-5"
-                  >
-                    <div>
-                      <h1 className="text-lg font-bold">{name}</h1>
-                      <div className="font-bold">₹{price}</div>
-                      <p className="text-stone-500">{desc}</p>
-                    </div>
-                    <div>
-                      <img
-                        src={`${CDN_URL}/${img}`}
-                        alt=""
-                        className="w-50 h-30 rounded-lg object-cover"
-                      />
-                    </div>
-                  </li>
-                );
-              })}
-          </ul>
-        </div>
+        {restaurantMenu.map((menu) => {
+          return (
+            <MenuSection key={menu?.card?.card.title} info={menu?.card?.card} />
+          );
+        })}
       </main>
     </div>
   );

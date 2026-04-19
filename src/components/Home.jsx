@@ -12,7 +12,7 @@ function Body() {
     async function fetchData() {
       const response = await fetch(RESTAURANT_LIST_API);
       const result = await response.json();
-      console.log(result);
+      // console.log(result);
       const allRestaurants =
         result.data?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle
           ?.restaurants;
