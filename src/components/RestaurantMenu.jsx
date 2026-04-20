@@ -1,55 +1,17 @@
-import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import Shimmer from "./Shimmer";
 import MenuSection from "./MenuSection";
+import useRestaurantMenu from "../hooks/useRestaurantMenu";
 
 function RestauratMenu() {
-  const [restaurantInfo, setRestaurantInfo] = useState(null);
-  const [restaurantMenu, setRestaurantMenu] = useState(null);
-
   const { resId } = useParams();
+  const result = useRestaurantMenu(resId);
+  const restaurantData = result?.cards[2]?.card?.card?.info;
+  const menuData =
+    result?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards.slice(1);
 
-  const fetchData = useCallback(() => {
-    async function fetchRestaurant() {
-      try {
-        const response = await fetch(
-          `https://corsproxy.io/https://namastedev.com/api/v1/listRestaurantMenu/${resId}`,
-        );
-
-        if (!response.ok) {
-          throw new Error("Error fetching data");
-        }
-        const result = await response.json();
-        return result;
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    return fetchRestaurant();
-  }, [resId]);
-
-  useEffect(() => {
-    async function fetchInfo() {
-      const result = await fetchData();
-      console.log(result);
-      const restaurantInfo = result.data.cards[2].card.card.info;
-      // const itemsInfo =
-      //   result?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards[1]
-      //     ?.card?.card;
-      const itemsInfo =
-        result?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards.slice(
-          1,
-        );
-      // console.log(items);
-      // console.log(restaurantInfo);
-      setRestaurantInfo(restaurantInfo);
-      setRestaurantMenu(itemsInfo);
-    }
-    fetchInfo();
-  }, [fetchData]);
-
-  if (!restaurantInfo) {
+  if (!restaurantData) {
     return <Shimmer />;
   }
 
@@ -57,7 +19,7 @@ function RestauratMenu() {
     <div className="flex flex-col justify-center items-center mt-20 ">
       {/* //? Restaurant Info Section */}
       <header className="flex flex-col gap-3 min-w-1/2 font-poppins">
-        <h1 className="font-bold text-4xl">{restaurantInfo.name}</h1>
+        <h1 className="font-bold text-4xl">{restaurantData.name}</h1>
         <div className="border border-stone-400 rounded-lg p-5 shadow-md shadow-stone-300 flex flex-col gap-2">
           <div className="flex gap-5 ">
             <div className="flex items-center gap-2">
@@ -78,9 +40,9 @@ function RestauratMenu() {
                 </svg>
               </span>
               <span className="text-lg font-semibold">
-                {restaurantInfo.avgRating}
+                {restaurantData.avgRating}
                 <span className="text-stone-400 font-semibold text-lg">
-                  ({restaurantInfo.totalRatingsString})
+                  ({restaurantData.totalRatingsString})
                 </span>
               </span>
             </div>
@@ -101,11 +63,11 @@ function RestauratMenu() {
                   />
                 </svg>
               </span>
-              <span>{restaurantInfo.costForTwo}</span>
+              <span>{restaurantData.costForTwo}</span>
             </div>
           </div>
           <h3 className="text-md font-semibold text-amber-500">
-            {restaurantInfo.cuisines.join(", ")}
+            {restaurantData.cuisines.join(", ")}
           </h3>
         </div>
       </header>
@@ -115,7 +77,7 @@ function RestauratMenu() {
         <h2 className="text-xl font-bold font-poppins text-stone-600  text-center">
           Menu
         </h2>
-        {restaurantMenu.map((menu) => {
+        {menuData.map((menu) => {
           return (
             <MenuSection key={menu?.card?.card.title} info={menu?.card?.card} />
           );
