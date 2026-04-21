@@ -1,10 +1,13 @@
 import { useParams } from "react-router-dom";
+import { useState } from "react";
 
 import Shimmer from "./Shimmer";
 import MenuSection from "./MenuSection";
 import useRestaurantMenu from "../hooks/useRestaurantMenu";
 
 function RestauratMenu() {
+  // state to determine which section card should remain open
+  const [expandedSectionIndex, setExpandedSectionIndex] = useState(0);
   const { resId } = useParams();
   const result = useRestaurantMenu(resId);
   const restaurantData = result?.cards[2]?.card?.card?.info;
@@ -16,7 +19,7 @@ function RestauratMenu() {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center mt-20 ">
+    <div className="flex flex-col justify-center items-center mt-20 mb-10 ">
       {/* //? Restaurant Info Section */}
       <header className="flex flex-col gap-3 min-w-1/2 font-poppins">
         <h1 className="font-bold text-4xl">{restaurantData.name}</h1>
@@ -77,9 +80,14 @@ function RestauratMenu() {
         <h2 className="text-xl font-bold font-poppins text-stone-600  text-center">
           Menu
         </h2>
-        {menuData.map((menu) => {
+        {menuData.map((menu, index) => {
           return (
-            <MenuSection key={menu?.card?.card.title} info={menu?.card?.card} />
+            <MenuSection
+              key={menu?.card?.card.title}
+              info={menu?.card?.card}
+              showSection={() => setExpandedSectionIndex(index)}
+              toggle={expandedSectionIndex === index ? true : false}
+            />
           );
         })}
       </main>

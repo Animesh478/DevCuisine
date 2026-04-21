@@ -12,13 +12,11 @@ function Body() {
     async function fetchData() {
       const response = await fetch(RESTAURANT_LIST_API);
       const result = await response.json();
-      // console.log(result);
+
       const allRestaurants =
         result.data?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle
           ?.restaurants;
-      // const allRestaurants =
-      //   result.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle
-      //     ?.restaurants;
+      console.log(allRestaurants);
       setListOfRestaurants(allRestaurants);
       setFilteredRestaurants(allRestaurants);
     }
@@ -26,8 +24,9 @@ function Body() {
   }, []);
 
   function handleFilterTopRestaurants() {
-    setListOfRestaurants(
-      listOfRestaurants.filter((restaruant) => restaruant.info.avgRating > 4.2),
+    console.log("hello");
+    setFilteredRestaurants(
+      listOfRestaurants.filter((restaurant) => restaurant.info.avgRating > 4.5),
     );
   }
 
@@ -62,7 +61,12 @@ function Body() {
         </button>
       </div>
       <div>
-        <button onClick={handleFilterTopRestaurants}>Top Picks</button>
+        <button
+          className="cursor-pointer mt-3 bg-amber-500 px-2 py-1 rounded-sm font-semibold active:scale-95 hover:bg-amber-400"
+          onClick={handleFilterTopRestaurants}
+        >
+          Top Picks
+        </button>
       </div>
       {listOfRestaurants.length === 0 ? (
         <Shimmer />
