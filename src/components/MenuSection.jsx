@@ -1,12 +1,18 @@
+import { useDispatch } from "react-redux";
 import { CDN_URL } from "../utils/constants";
+import { addItem } from "../store/cartSlice";
 
 function MenuSection({ info, toggle, showSection }) {
+  const dispatch = useDispatch();
   const restaurantMenu = info.itemCards;
   const sectionName = info.title;
-  // console.log(info);
 
   const handleToggleMenu = function () {
     showSection();
+  };
+
+  const handleAddItem = function (menuItem) {
+    dispatch(addItem(menuItem));
   };
   return (
     <div className="flex flex-col w-full mt-2 ">
@@ -60,7 +66,10 @@ function MenuSection({ info, toggle, showSection }) {
                     alt=""
                     className="w-50 h-30 rounded-lg object-cover"
                   />
-                  <button className="border border-stone-400 absolute px-10 py-2 rounded-md bg-white left-1/2 -translate-x-1/2 -translate-y-1/2 cursor-pointer text-green-600 uppercase font-bold hover:bg-stone-200">
+                  <button
+                    onClick={() => handleAddItem(menuObj)}
+                    className="border border-stone-400 absolute px-10 py-2 rounded-md bg-white left-1/2 -translate-x-1/2 -translate-y-1/2 cursor-pointer text-green-600 uppercase font-bold hover:bg-stone-200"
+                  >
                     Add
                   </button>
                 </div>

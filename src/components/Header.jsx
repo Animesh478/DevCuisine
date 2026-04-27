@@ -1,6 +1,8 @@
+import { useSelector } from "react-redux";
 import NavItem from "./navbar/NavItem";
 
 function Header() {
+  const items = useSelector((state) => state.cart.items);
   return (
     <div className="flex justify-between items-center shadow-lg px-12 py-2">
       <div>
@@ -14,7 +16,9 @@ function Header() {
           <NavItem name="Home" path="/" />
           <NavItem name="About Us" path="/about" />
           <NavItem name="Contact Us" path="/contact" />
-          <NavItem name="Cart" />
+          <NavItem name="Cart" path="/cart">
+            ({items.length})
+          </NavItem>
         </ul>
       </div>
     </div>
